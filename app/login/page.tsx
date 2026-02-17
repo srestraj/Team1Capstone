@@ -7,12 +7,12 @@ export default function LoginPage() {
         <h1 className="text-3xl font-bold text-black font-semibold text-center mb-4">Create Account</h1>
          
         <div>
-          <label className="block text-lg font-medium leading-6" htmlFor="email">Email Address</label>
+          <label className="block text-lg font-medium  text-black leading-6" htmlFor="email">Email Address</label>
           <input className="mt-1 w-full rounded-full bg-form-bg text-black/40 px-4 py-2.5 focus:border-black focus:outline-none" id="email" type="email" placeholder="sandipbharati07@gmail.com" />
         </div>
 
         <div>
-          <label className="block text-lg font-medium leading-6" htmlFor="password">Password</label>
+          <label className="block text-lg font-medium text-black leading-6" htmlFor="password">Password</label>
           <input className="mt-1 w-full rounded-full bg-form-bg text-black/40 px-4 py-2.5 focus:border-black focus:outline-none" id="password" type="password" placeholder="••••••••" />
         </div>
 
@@ -22,6 +22,7 @@ export default function LoginPage() {
         <span className="text-center text-sm text-gray-600 mt-4 block">
           Don't have an account? <Link href="/register" className="text-indigo-600 hover:underline">Register</Link>
         </span>
+        
       </form>
     </div>
   );
