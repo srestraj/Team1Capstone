@@ -1,4 +1,10 @@
-const Explore = () => {
+import ProductCard from "../components/ProductCard";
+import { fetchProducts } from "../utils/apiService";
+import { Product } from "../utils/types/Product";
+
+const Explore = async () => {
+  const products: Product[] = await fetchProducts();
+
   return (
     <section>
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -389,82 +395,11 @@ const Explore = () => {
           </div>
 
           <div className="lg:col-span-3">
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <li>
-                <a href="#" className="group block overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&amp;fit=crop&amp;q=80&amp;w=1160"
-                    alt=""
-                    className="h-87.5 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-112.5"
-                  />
-
-                  <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                      Basic Tee
-                    </h3>
-
-                    <p className="mt-2">
-                      <span className="sr-only"> Regular Price </span>
-
-                      <span className="tracking-wider text-gray-900">
-                        {" "}
-                        £24.00 GBP{" "}
-                      </span>
-                    </p>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#" className="group block overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&amp;fit=crop&amp;q=80&amp;w=1160"
-                    alt=""
-                    className="h-87.5 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-112.5"
-                  />
-
-                  <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                      Basic Tee
-                    </h3>
-
-                    <p className="mt-2">
-                      <span className="sr-only"> Regular Price </span>
-
-                      <span className="tracking-wider text-gray-900">
-                        {" "}
-                        £24.00 GBP{" "}
-                      </span>
-                    </p>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#" className="group block overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&amp;fit=crop&amp;q=80&amp;w=1160"
-                    alt=""
-                    className="h-87.5 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-112.5"
-                  />
-
-                  <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                      Basic Tee
-                    </h3>
-
-                    <p className="mt-2">
-                      <span className="sr-only"> Regular Price </span>
-
-                      <span className="tracking-wider text-gray-900">
-                        {" "}
-                        £24.00 GBP{" "}
-                      </span>
-                    </p>
-                  </div>
-                </a>
-              </li>
-            </ul>
+            <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((product: Product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
