@@ -17,7 +17,7 @@ export default function ProductSection({
       <div className="mt-8 flex items-center overflow-auto gap-6">
         {products.slice(0, 4).map((p) => (
           <ProductCard
-            classNames="md:min-w-1/4 min-w-11/12"
+            classNames="md:w-1/4 w-11/12 md:min-w-1/4 min-w-11/12"
             key={p._id}
             product={p}
           />

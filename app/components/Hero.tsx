@@ -14,11 +14,12 @@ export default function Hero() {
 
           <p className="mt-5 max-w-lg text-sm leading-6 text-gray-700">
             Browse through our diverse range of meticulously crafted garments,
-            designed to bring out your individuality and cater to your sense of style.
+            designed to bring out your individuality and cater to your sense of
+            style.
           </p>
 
           <Link
-            href="/products"
+            href="/shop"
             className="mt-7 inline-flex rounded-full bg-black px-8 py-3 text-sm font-semibold text-white hover:opacity-90"
           >
             Shop Now
@@ -62,7 +63,9 @@ export default function Hero() {
           <span className="text-2xl font-serif tracking-wide">ZARA</span>
           <span className="text-2xl font-serif tracking-wide">GUCCI</span>
           <span className="text-2xl font-serif tracking-wide">PRADA</span>
-          <span className="text-2xl font-serif tracking-wide">Calvin Klein</span>
+          <span className="text-2xl font-serif tracking-wide">
+            Calvin Klein
+          </span>
         </div>
       </div>
     </section>
