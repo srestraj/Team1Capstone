@@ -87,7 +87,7 @@ export default function RegisterPage() {
             id="firstName"
             name="firstName"
             type="text"
-            placeholder="Sandip"
+            placeholder="First Name"
           />
           {errors.firstName && <p className="text-red-500 text-xs pl-4 font-medium">{errors.firstName}</p>}
         </div>
@@ -102,7 +102,7 @@ export default function RegisterPage() {
             id="lastName"
             name="lastName"
             type="text"
-            placeholder="Bharati"
+            placeholder="Last Name"
           />
           {errors.lastName && <p className="text-red-500 text-xs pl-4 font-medium">{errors.lastName}</p>}
         </div>
@@ -117,7 +117,7 @@ export default function RegisterPage() {
             id="email"
             name="email"
             type="email"
-            placeholder="sandipbharati07@gmail.com"
+            placeholder="name@example.com"
           />
           {errors.email && <p className="text-red-500 text-xs pl-4 font-medium">{errors.email}</p>}
         </div>

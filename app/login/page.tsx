@@ -81,7 +81,7 @@ export default function LoginPage() {
             id="email"
             name="email"
             type="email"
-            placeholder="sandipbharati07@gmail.com"
+            placeholder="name@email.com"
           />
           {errors.email && <p className="text-red-500 text-xs pl-4 font-medium">{errors.email}</p>}
         </div>
