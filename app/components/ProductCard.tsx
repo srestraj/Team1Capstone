@@ -8,7 +8,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="relative group block overflow-hidden rounded-t-[20px]"
+      className="relative group block overflow-hidden"
     >
       <div className="overflow-hidden md:h-74.5 h-43.5 rounded-[20px] bg-product-bg">
         <Image
