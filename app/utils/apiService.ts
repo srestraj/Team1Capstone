@@ -6,7 +6,8 @@ export const fetchProducts = async () => {
   try {
     const products: ProductType[] = await fetch(`${BASE_URL}/api/products`, { cache: "no-store" })
     .then((res) => res.json());
-    return products;
+    const sortedProducts = products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return sortedProducts;
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;

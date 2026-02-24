@@ -10,16 +10,18 @@ const ProductCard = ({ product }: { product: ProductType }) => {
       href={`/product/${product.slug}`}
       className="relative group block overflow-hidden rounded-t-[20px]"
     >
-      <Image
-        width={500}
-        height={500}
-        src={product.thumbnail}
-        alt={product.title}
-        className="rounded-[20px] md:h-74.5 h-43.5 w-full object-cover object-center bg-product-bg"
-      />
+      <div className="overflow-hidden md:h-74.5 h-43.5 rounded-[20px] bg-product-bg">
+        <Image
+          width={500}
+          height={500}
+          src={product.thumbnail}
+          alt={product.title}
+          className="w-full h-full object-cover object-center group-hover:scale-115 transition-transform duration-300 ease-in-out"
+        />
+      </div>
 
       <div className="bg-white pt-3 flex flex-col gap-2">
-        <h3 className="md:text-xl text-base font-bold text-black group-hover:underline group-hover:underline-offset-4">
+        <h3 className="md:text-xl text-base font-bold text-black truncate">
           {product.title}
         </h3>
 
