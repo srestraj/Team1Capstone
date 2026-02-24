@@ -19,7 +19,7 @@ export default function DressStyle() {
               key={it.title}
               className="relative h-40 overflow-hidden rounded-2xl bg-gray-200"
             >
-              <Image src={it.img} alt={it.title} className="h-full w-full object-cover" />
+              <Image width={500} height={500} src={it.img} alt={it.title} className="h-full w-full object-cover" />
               <div className="absolute left-5 top-5 text-lg font-black">{it.title}</div>
             </div>
           ))}

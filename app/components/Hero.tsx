@@ -46,6 +46,8 @@ export default function Hero() {
 
           <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-200">
             <Image
+              width={800}
+              height={600}
               src="/hero.png"
               alt="Fashion hero"
               className="h-full w-full object-cover"

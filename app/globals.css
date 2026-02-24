@@ -3,22 +3,22 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --rating-star: #ffc633;
+  --product-bg: #f0eeed;
+  --form-bg: #f0f0f0;
+  --custom-red: #ff3333;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-form-bg: #f0f0f0;
+  --color-form-bg: var(--form-bg);
+  --color-product-bg: var(--product-bg);
+  --color-rating: var(--rating-star);
+  --color-custom-red: var(--custom-red);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

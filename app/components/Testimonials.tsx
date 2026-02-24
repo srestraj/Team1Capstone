@@ -1,3 +1,5 @@
+import StarRating from "./StarRating";
+
 type Review = {
   name: string;
   text: string;
@@ -10,13 +12,6 @@ const reviews: Review[] = [
   { name: "James K.", stars: 4, text: "Great value and nice materials. Will buy again for sure." },
 ];
 
-function Stars({ n }: { n: number }) {
-  return (
-    <div className="text-sm">
-      {"★★★★★☆☆☆☆☆".slice(5 - n, 10 - n)}
-    </div>
-  );
-}
 
 export default function Testimonials() {
   return (
@@ -32,10 +27,7 @@ export default function Testimonials() {
       <div className="mt-8 grid grid-cols-3 gap-6">
         {reviews.map((r) => (
           <div key={r.name} className="rounded-2xl border border-gray-200 bg-white p-6">
-            <div className="text-yellow-500">
-              {"★".repeat(r.stars)}
-              <span className="text-gray-300">{"★".repeat(5 - r.stars)}</span>
-            </div>
+            <StarRating rating={r.stars} readonly={true} />
             <p className="mt-3 text-sm text-gray-700">{r.text}</p>
             <p className="mt-4 text-sm font-bold">{r.name}</p>
           </div>
