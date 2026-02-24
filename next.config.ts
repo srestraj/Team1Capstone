@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
         protocol: (NEXT_PUBLIC_SITE_PROTOCOL || "https") as "http" | "https",
         hostname: NEXT_PUBLIC_SITE_NAME || "",
         pathname: "/**",
-      },
+      }
     ],
     formats: ["image/webp"]
   }

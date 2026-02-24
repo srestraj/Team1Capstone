@@ -1,10 +1,10 @@
-import { Product } from "./types/Product";
+import { ProductType } from "./types/Product";
 
 const { BASE_URL } = process.env;
 
 export const fetchProducts = async () => {
   try {
-    const products: Product[] = await fetch(`${BASE_URL}/api/products`, { cache: "no-store" })
+    const products: ProductType[] = await fetch(`${BASE_URL}/api/products`, { cache: "no-store" })
     .then((res) => res.json());
     return products;
   } catch (error) {
