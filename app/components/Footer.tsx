@@ -1,10 +1,12 @@
+import Image from "next/image";
+
 const Footer = () => {
   return (
     <footer className="bg-[#F0F0F0]">
       {/* Newsletter Section*/}
       <div className="bg-white">
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-0">
-      <div className="bg-black rounded-[32px] px-8 py-12 md:px-16 md:py-16 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10 -mb-16">
+      <div className="bg-black rounded-[32px] px-8 py-12 md:px-16 md:py-16 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10 -mb-32    ">
         <h2 className="text-white text-3xl md:text-[30px] font-extrabold uppercase leading-[1.1] max-w-md text-center md:text-left">
           Stay upto date about<br />
           our latest offers
@@ -13,7 +15,7 @@ const Footer = () => {
           <div className="relative">
             <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+            </svg>  
             <input 
               type="email" 
               placeholder="Enter your email address" 
@@ -108,47 +110,13 @@ const Footer = () => {
       {/* Bottom Bar - */}
 <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4">
   <p className="text-gray-400 text-sm">Shop.co © 2000-2023. All Rights Reserved</p>
-  <div className="flex items-center gap-3">
+  <div className="flex items-center gap-1">
    {/* Visa */}
-<div className="bg-white rounded-lg px-4 py-2 h-10 flex items-center justify-center">
-  <img 
-    src="https://kimi-web-img.moonshot.cn/img/cdn.freebiesupply.com/0f94d1b0d069d03722a8a2abf6e9d0f3e696eb01.png" 
-    alt="Visa" 
-    className="h-12 w-auto object-contain"
-  />
-</div>
-    {/* Mastercard */}
-    <div className="bg-white rounded-lg px-3 py-2 h-10 flex items-center justify-center">
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" 
-        alt="Mastercard" 
-        className="h-6 w-auto object-contain"
-      />
-    </div>
-    {/* PayPal */}
-    <div className="bg-white rounded-lg px-4 py-2 h-10 flex items-center justify-center">
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1280px-PayPal.svg.png" 
-        alt="PayPal" 
-        className="h-5 w-auto object-contain"
-      />
-    </div>
-    {/* Apple Pay */}
-    <div className="bg-white rounded-lg px-4 py-2 h-10 flex items-center justify-center">
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/3840px-Apple_Pay_logo.svg.png" 
-        alt="Apple Pay" 
-        className="h-5 w-auto object-contain"
-      />
-    </div>
-    {/* Google Pay */}
-    <div className="bg-white rounded-lg px-4 py-2 h-10 flex items-center justify-center">
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png" 
-        alt="Google Pay" 
-        className="h-6 w-auto object-contain"
-      />
-    </div>
+    <Image width={46} height={30} className="h-auto" src="/images/visa.svg" alt="Visa" />
+    <Image width={46} height={30} className="h-auto" src="/images/mastercard.svg" alt="Mastercard" />
+    <Image width={46} height={30} className="h-auto" src="/images/paypal.svg" alt="PayPal" />
+    <Image width={46} height={30} className="h-auto" src="/images/applepay.svg" alt="Apple Pay" />
+    <Image width={46} height={30} className="h-auto" src="/images/googlepay.svg" alt="Google Pay" />
   </div>
 </div>
  </div>
