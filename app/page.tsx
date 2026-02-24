@@ -2,7 +2,8 @@ import Hero from "./components/Hero";
 import ProductSection from "./components/ProductSection";
 import DressStyle from "./components/DressStyle";
 import Testimonials from "./components/Testimonials";
-import Newsletter from "./components/Newsletter";
+import { ProductType } from "./utils/types/Product";
+import { fetchProducts } from "./utils/apiService";
 
 // const newArrivals: Product[] = [
 //   { id: "1", name: "T-shirt with Tape Details", price: 120, image: "/products/p1.jpg" },
@@ -18,15 +19,15 @@ import Newsletter from "./components/Newsletter";
 //   { id: "8", name: "Faded Skinny Jeans", price: 210, image: "/products/p8.jpg" },
 // ];
 
-export default function Home() {
+export default async function Home() {
+  const newArrivals: ProductType[] = await fetchProducts();
   return (
     <main>
       <Hero />
-      {/* <ProductSection title="NEW ARRIVALS" products={newArrivals} /> */}
-      {/* <ProductSection title="TOP SELLING" products={topSelling} /> */}
+      <ProductSection title="NEW ARRIVALS" products={newArrivals.slice(0, 4)} />
+      <ProductSection title="TOP SELLING" products={newArrivals.slice(0, 4)} />
       <DressStyle />
       <Testimonials />
-      <Newsletter />
     </main>
   );
 }

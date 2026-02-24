@@ -1,19 +1,26 @@
-import ProductCard, { Product } from "./productcard";
+import { ProductType } from "../utils/types/Product";
+import ProductCard from "./ProductCard";
 
 export default function ProductSection({
   title,
   products,
 }: {
   title: string;
-  products: Product[];
+  products: ProductType[];
 }) {
   return (
     <section className="max-w-6xl mx-auto px-6 py-12">
-      <h2 className="text-center text-2xl font-black tracking-tight">{title}</h2>
+      <h2 className="text-center text-2xl font-black tracking-tight">
+        {title}
+      </h2>
 
-      <div className="mt-8 grid grid-cols-4 gap-6">
+      <div className="mt-8 flex items-center overflow-auto gap-6">
         {products.slice(0, 4).map((p) => (
-          <ProductCard key={p.id} p={p} />
+          <ProductCard
+            classNames="md:min-w-1/4 min-w-11/12"
+            key={p._id}
+            product={p}
+          />
         ))}
       </div>
     </section>
