@@ -16,7 +16,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           height={500}
           src={product.thumbnail}
           alt={product.title}
-          className="w-full h-full object-cover object-center group-hover:scale-115 transition-transform duration-300 ease-in-out"
+          className="w-full h-full object-cover object-center bg-product-bg group-hover:scale-115 transition-transform duration-300 ease-in-out"
         />
       </div>
 
