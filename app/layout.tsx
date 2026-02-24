@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Footer from "./components/Footer";
 
 const satoshiFont = localFont({
   src: [
@@ -44,7 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshiFont.className} antialiased`}>{children}</body>
+      <body className={`${satoshiFont.className} antialiased`}>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
