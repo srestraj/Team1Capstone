@@ -3,38 +3,36 @@ import bcrypt from "bcryptjs";
 import { dbConnect } from "@/app/lib/mongo";
 import User from "@/app/model/user-model";
 
-export const POST = async (request: Request) => {
+export const POST = async (req: Request) => {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    const { email, password } = await req.json();
 
+    // 1. Connect to MongoDB
     await dbConnect();
 
-    // 1. Check if user exists
+    // 2. Check if user exists
     const user = await User.findOne({ email: email.toLowerCase() });
-
     if (!user) {
-      // This is the error message you wanted
       return NextResponse.json(
-        { message: "Email address does not match" }, 
+        { message: "Email address does not match" },
         { status: 401 }
       );
     }
 
-    // 2. Check if password matches
+    // 3. Check password
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) {
-      // This is the error message you wanted
       return NextResponse.json(
-        { message: "Password does not match" }, 
+        { message: "Password does not match" },
         { status: 401 }
       );
     }
 
+    // 4. Login successful
     return NextResponse.json({ message: "Login successful" }, { status: 200 });
 
   } catch (err) {
+    console.error("Login error:", err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 };

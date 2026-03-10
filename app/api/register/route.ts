@@ -1,35 +1,35 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import createUser from "@/app/model/user-model";
 import { dbConnect } from "@/app/lib/mongo";
-import { registerSchema } from "@/app/lib/zod"; // Import the Zod schema for registration validation
+import User from "@/app/model/user-model";
+import { registerSchema } from "@/app/lib/zod";
 
-export const POST = async (request: Request) => {
+export const POST = async (req: Request) => {
   try {
-    const body = await request.json();
-    console.log("Received registration data:", body);
-    
-    // Validate with Zod
+    const body = await req.json();
+
+    // 1. Validate incoming data with Zod
     const validation = registerSchema.safeParse(body);
-    
     if (!validation.success) {
-      // Send the whole errors array so the frontend can map it to fields
       return NextResponse.json(
-        { 
-          message: "Validation failed", 
-          errors: validation.error.flatten().fieldErrors 
-        }, 
+        {
+          message: "Validation failed",
+          errors: validation.error.flatten().fieldErrors,
+        },
         { status: 400 }
       );
     }
 
     const { firstName, lastName, email, address, password } = validation.data;
 
+    // 2. Connect to MongoDB
     await dbConnect();
 
+    // 3. Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await createUser.create({
+    // 4. Create the user in DB
+    await User.create({
       firstName,
       lastName,
       email: email.toLowerCase(),
@@ -41,12 +41,11 @@ export const POST = async (request: Request) => {
       { message: "User registered successfully" },
       { status: 201 }
     );
-
   } catch (err: any) {
-    console.error("Registration error", err);
+    console.error("Registration error:", err);
 
+    // Handle duplicate email
     if (err.code === 11000) {
-      console.error("Duplicate email error:", err);
       return NextResponse.json(
         { message: "Email already exists" },
         { status: 409 }
@@ -54,7 +53,7 @@ export const POST = async (request: Request) => {
     }
 
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { message: "Server error" },
       { status: 500 }
     );
   }

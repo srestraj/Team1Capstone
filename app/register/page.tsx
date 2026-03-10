@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { registerSchema } from "@/app/lib/zod";
+import { registerUser } from "@/app/utils/apiService";
+
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -37,29 +39,19 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
+try {
+  await registerUser(validation.data);
+  router.push("/login");
+} catch (error: any) {
+  if (error.errors) {
+    setErrors(error.errors);
+  } else {
+    setServerError(error.message || "Registration failed");
+  }
+} finally {
+  setLoading(false);
+}
 
-    try {
-      // 2. API Request
-      const response = await fetch(`/api/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validation.data),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Redirect to login 
-        router.push("/login");
-      } else {
-        // 3. Handle Server Errors (e.g., Email already exists)
-        setServerError(data.message);
-      }
-    } catch (error) {
-      setServerError("An unexpected error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
   }
 
   return (
@@ -132,7 +124,7 @@ export default function RegisterPage() {
             id="address"
             name="address"
             type="text"
-            placeholder="360 Victoria Street South"
+            placeholder="address"
           />
           {errors.address && <p className="text-red-500 text-xs pl-4 font-medium">{errors.address}</p>}
         </div>
