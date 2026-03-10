@@ -4,11 +4,21 @@ import Image from "next/image";
 import formatter from "../utils/priceFormatter";
 import StarRating from "./StarRating";
 
-const ProductCard = ({ product }: { product: ProductType }) => {
+const ProductCard = ({
+  classNames,
+  product,
+}: {
+  classNames?: string;
+  product: ProductType;
+}) => {
   return (
     <Link
       href={`/product/${product.slug}`}
+<<<<<<< HEAD
       className="relative group block overflow-hidden"
+=======
+      className={`relative group block overflow-hidden ${classNames || ""}`}
+>>>>>>> @{-1}
     >
       <div className="overflow-hidden md:h-74.5 h-43.5 rounded-[20px] bg-product-bg">
         <Image
