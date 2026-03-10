@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import User from "@/app/model/user-model";
 import { registerSchema } from "@/app/lib/zod";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // Add to .env
+const JWT_SECRET = process.env.JWT_SECRET; // Ensure you have this in your .env file, e.g. JWT_SECRET
 
 export const POST = async (req: Request) => {
   try {
@@ -43,7 +43,7 @@ export const POST = async (req: Request) => {
     // 5. Generate JWT
     const token = jwt.sign(
       { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}` },
-      JWT_SECRET,
+      JWT_SECRET as string,
       { expiresIn: "7d" }
     );
 

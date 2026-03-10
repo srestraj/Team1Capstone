@@ -4,7 +4,7 @@ import { dbConnect } from "@/app/lib/mongo";
 import jwt from "jsonwebtoken";
 import User from "@/app/model/user-model";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // store in .env
+const JWT_SECRET = process.env.JWT_SECRET ;
 
 export const POST = async (req: Request) => {
   try {
@@ -34,7 +34,7 @@ export const POST = async (req: Request) => {
     // 4. Create JWT token
     const token = jwt.sign(
       { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}` },
-      JWT_SECRET,
+      JWT_SECRET as string,
       { expiresIn: "7d" }
     );
 
