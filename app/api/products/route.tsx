@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
+import Product from "@/app/models/Product";
 
 export const fetchCache = "force-no-store";
 
@@ -9,10 +10,6 @@ if (!MONGO_DB_URI) {
   throw new Error("Please add MONGO_DB_URI to environment variables");
 }
 
-const productSchema = new mongoose.Schema({}, { strict: false });
-const Product =
-  mongoose.models.Product ||
-  mongoose.model("Product", productSchema, "products");
 
 async function connectDB() {
   if (mongoose.connection.readyState === 0) {

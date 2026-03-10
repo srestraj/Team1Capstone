@@ -16,7 +16,7 @@ export interface ProductDocument extends Document {
   stock: number;
   colors: string[];
   sizes: string[];
-  slug: string;
+  slug?: string;
   createdAt: Date;
 }
 
@@ -37,7 +37,7 @@ export type ProductType = {
   stock: number;
   colors: string[];
   sizes: string[];
-  slug: string;
+  slug?: string;
   createdAt: Date;
 }
 
