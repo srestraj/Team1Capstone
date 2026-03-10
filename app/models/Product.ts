@@ -30,10 +30,7 @@ const slugify = (text: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-console.log("Setting up slug middleware");
-
 productSchema.pre("save", function () {
-  console.log("SLUG MIDDLEWARE RUNNING");
 
   if (!this.slug && this.title) {
     const baseSlug = slugify(this.title);
