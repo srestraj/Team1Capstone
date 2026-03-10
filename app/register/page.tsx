@@ -40,9 +40,10 @@ export default function RegisterPage() {
       return;
     }
 try {
-  await registerUser(validation.data);
-  router.push("/login");
-} catch (error: any) {
+  const response = await registerUser(validation.data);
+  console.log("Server Response:", response); // Look at your browser console (F12)
+  // router.push("/login"); // Comment this out temporarily to stay on the page
+}catch (error: any) {
   if (error.errors) {
     setErrors(error.errors);
   } else {

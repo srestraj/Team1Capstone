@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { dbConnect } from "@/app/lib/mongo";
+import jwt from "jsonwebtoken";
 import User from "@/app/model/user-model";
+
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // store in .env
 
 export const POST = async (req: Request) => {
   try {
@@ -10,7 +13,7 @@ export const POST = async (req: Request) => {
     // 1. Connect to MongoDB
     await dbConnect();
 
-    // 2. Check if user exists
+    // 2. Find user
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return NextResponse.json(
@@ -28,8 +31,18 @@ export const POST = async (req: Request) => {
       );
     }
 
-    // 4. Login successful
-    return NextResponse.json({ message: "Login successful" }, { status: 200 });
+    // 4. Create JWT token
+    const token = jwt.sign(
+      { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}` },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // 5. Return JWT in response
+    return NextResponse.json(
+      { message: "Login successful", token },
+      { status: 200 }
+    );
 
   } catch (err) {
     console.error("Login error:", err);

@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { dbConnect } from "@/app/lib/mongo";
+import jwt from "jsonwebtoken";
 import User from "@/app/model/user-model";
 import { registerSchema } from "@/app/lib/zod";
+
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // Add to .env
 
 export const POST = async (req: Request) => {
   try {
@@ -29,7 +32,7 @@ export const POST = async (req: Request) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // 4. Create the user in DB
-    await User.create({
+    const user = await User.create({
       firstName,
       lastName,
       email: email.toLowerCase(),
@@ -37,8 +40,16 @@ export const POST = async (req: Request) => {
       password: hashedPassword,
     });
 
+    // 5. Generate JWT
+    const token = jwt.sign(
+      { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}` },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // 6. Return token and message
     return NextResponse.json(
-      { message: "User registered successfully" },
+      { message: "User registered successfully", token },
       { status: 201 }
     );
   } catch (err: any) {
