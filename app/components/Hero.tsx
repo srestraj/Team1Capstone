@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="bg-[#F4F0F0]">
-      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 gap-10 items-center">
-        <div>
+      <div className="max-w-6xl mx-auto pt-14 grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
+        <div className="px-6">
           <h1 className="text-6xl font-black leading-[0.95] tracking-tight">
             FIND CLOTHES <br />
             THAT MATCHES <br />
@@ -25,16 +25,16 @@ export default function Hero() {
             Shop Now
           </Link>
 
-          <div className="mt-10 grid grid-cols-3 gap-8">
-            <div>
+          <div className="mt-10 flex flex-wrap items-center divide-x divide-gray-300 gap-8">
+            <div className="pr-8">
               <p className="text-3xl font-black">200+</p>
               <p className="text-xs text-gray-600">International Brands</p>
             </div>
-            <div className="border-l border-gray-300 pl-8">
+            <div className="pr-8">
               <p className="text-3xl font-black">2,000+</p>
               <p className="text-xs text-gray-600">High-Quality Products</p>
             </div>
-            <div className="border-l border-gray-300 pl-8">
+            <div>
               <p className="text-3xl font-black">30,000+</p>
               <p className="text-xs text-gray-600">Happy Customers</p>
             </div>
@@ -45,13 +45,13 @@ export default function Hero() {
           <div className="absolute right-6 top-10 h-10 w-10 rotate-12 bg-black [clip-path:polygon(50%_0,60%_35%,100%_50%,60%_65%,50%_100%,40%_65%,0_50%,40%_35%)]" />
           <div className="absolute left-10 top-1/2 h-7 w-7 -translate-y-1/2 bg-black [clip-path:polygon(50%_0,60%_35%,100%_50%,60%_65%,50%_100%,40%_65%,0_50%,40%_35%)]" />
 
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-200">
+          <div className="md:h-[700px] h-[510px] w-full overflow-hidden rounded-3xl bg-gray-200">
             <Image
               width={800}
               height={600}
-              src="/hero.png"
+              src="/hero.jpg"
               alt="Fashion hero"
-              className="h-full w-full object-cover"
+              className="transition-all duration-300 w-full h-full object-cover"
             />
           </div>
         </div>
