@@ -5,6 +5,7 @@ const { BASE_URL } = process.env;
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({
+    apiFolder: "app/api",
     definition: {
       openapi: "3.0.0",
       info: {
