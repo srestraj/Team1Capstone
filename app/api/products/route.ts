@@ -17,6 +17,18 @@ async function connectDB() {
   }
 }
 
+/**
+ * @openapi
+ * /api/products:
+ *   get:
+ *     summary: Get products
+ *     description: Returns products with optional filters
+ *     tags:
+ *       - Products
+ *     responses:
+ *       200:
+ *         description: List of products
+ */
 export async function GET() {
   try {
     await connectDB();
