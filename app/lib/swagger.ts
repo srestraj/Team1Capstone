@@ -1,3 +1,4 @@
+import path from "path";
 import { createSwaggerSpec } from "next-swagger-doc";
 
 const { BASE_URL } = process.env;
@@ -17,7 +18,7 @@ export const getApiDocs = () => {
         },
       ],
     },
-    apis: ["app/api/**/*.ts"],
+    apis: [path.join(process.cwd(), "app/api/**/*.ts")],
   });
 
   return spec;
