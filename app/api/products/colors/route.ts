@@ -8,6 +8,18 @@ async function connectDB() {
   }
 }
 
+/**
+ * @openapi
+ * /api/products/colors:
+ *   get:
+ *     summary: Get product colors
+ *     description: Returns a list of unique product colors
+ *     tags:
+ *       - Products
+ *     responses:
+ *       200:
+ *         description: List of product colors
+ */
 export async function GET() {
   try {
     await connectDB();
