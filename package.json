@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx scripts/swagger.ts && next dev",
-    "build": "next build && tsx scripts/swagger.ts",
+    "build": "tsx scripts/swagger.ts && next build",
     "start": "next start",
     "lint": "eslint"
   },
