@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "tsx scripts/swagger.ts && next dev",
+    "build": "tsx scripts/swagger.ts && next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -23,12 +23,18 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^20",
+    "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-ui-react": "^5.18.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "next-swagger-doc": "^0.4.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "swagger-ui-react": "^5.32.1",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
