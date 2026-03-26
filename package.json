@@ -31,6 +31,10 @@
     "@types/swagger-ui-react": "^5.18.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "next-swagger-doc": "^0.4.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "swagger-ui-react": "^5.32.1",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
