@@ -145,12 +145,12 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <div className="font-black text-gray-900 leading-none mb-1">{item.title}</div>
-                          <div className="text-[10px] text-gray-400 font-mono">{item.slug}</div>
+                          <div className="text-[20px] text-gray-400 font-mono">{item.slug}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-8 py-5">
-                      <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                      <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-[20px] font-black uppercase tracking-tighter">
                         {item.category || "General"}
                       </span>
                     </td>
