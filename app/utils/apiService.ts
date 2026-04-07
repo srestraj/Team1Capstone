@@ -20,39 +20,47 @@ export const fetchColors = async () => {
       .then((res) => res.json());
     return colors;
   } catch (error) {
-    console.error("Error fetching colors:", error);
-    throw error;
-  }
-}
-
-export const loginUser = async (email: string, password: string) => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-      cache: "no-store",
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Login failed");
-    }
-
-    // Store JWT in browser
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-    }
-
-    return data;
-  } catch (error) {
     console.error("Error logging in:", error);
     throw error;
   }
 };
 
-// ✅ Register with JWT
+
+export const fetchSingleProduct = async (slug: string) => {
+  try {
+    const product: ProductType = await fetch(`${BASE_URL}/api/product?slug=${slug}`)
+      .then((res) => res.json());
+    return product;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    throw error;
+  }
+
+}
+
+export const loginUser = async (email: string, password: string) => {
+  const response = await fetch(`${BASE_URL}/api/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+    cache: "no-store",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Login failed");
+  }
+
+  // Store JWT in browser
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+  }
+
+  return data;
+}
+
+
 export const registerUser = async (userData: {
   firstName: string;
   lastName: string;
