@@ -98,7 +98,6 @@ export default function AdminDashboard() {
         <header className="flex justify-between items-center mb-10">
           <div>
             <h2 className="text-4xl font-black uppercase tracking-tighter">Inventory</h2>
-            <p className="text-gray-500 font-medium">Real-time MongoDB Data</p>
           </div>
           <button 
             onClick={() => handleOpenModal()}
