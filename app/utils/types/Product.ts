@@ -47,3 +47,7 @@ export type StarType = {
   primaryFill?: string;
   secondaryFill?: string | null;
 }
+
+export type IconType = {
+  classNames?: string;
+}

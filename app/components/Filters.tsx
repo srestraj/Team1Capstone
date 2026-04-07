@@ -1,328 +1,254 @@
-const Filters = () => {
+"use client";
+
+import { useState } from "react";
+import Filter from "./icons/Filter";
+import MultiRangeSlider from "./MultiRangeSlider";
+
+const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange: (queryString: string) => void }) => {
+  const [filters, setFilters] = useState<{
+    category?: string;
+    subcategory?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    colors: string[];
+  }>({
+    colors: [],
+  });
+
+  const updateFilter = (type: string, payload: any) => {
+    if (type === "color") {
+      const { value, checked } = payload;
+
+      setFilters((prev) => ({
+        ...prev,
+        colors: checked
+          ? [...prev.colors, value] // add
+          : prev.colors.filter((c) => c !== value), // remove
+      }));
+    } else {
+      setFilters((prev) => ({
+        ...prev,
+        [type]: payload,
+      }));
+    }
+  };
+
+  const updatePrice = (min: number, max: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: min,
+      maxPrice: max,
+    }));
+  };
+
+  const search = () => {
+    const params = new URLSearchParams();
+
+    if (filters.category) {
+      params.append("category", filters.category);
+    }
+
+    if (filters.minPrice !== undefined) {
+      params.append("minPrice", String(filters.minPrice));
+    }
+
+    if (filters.maxPrice !== undefined) {
+      params.append("maxPrice", String(filters.maxPrice));
+    }
+
+    if (filters.colors.length > 0) {
+      const encodedColors = filters.colors.map((c) =>
+        encodeURIComponent(c)
+      );
+      params.append("color", encodedColors.join(","));
+    }
+
+    const queryString = params.toString();
+
+    onFilterChange(queryString);
+  };
+
+  const categoriesSample = [
+    {
+      "_id": "69d47dd6e082ea2c9ee2c809",
+      "title": "jacket",
+      "subcategories": [
+        "bomber",
+        "summer",
+        "winter"
+      ],
+      "__v": 0
+    },
+    {
+      "_id": "69d47dd6e082ea2c9ee2c80a",
+      "title": "t-shirts",
+      "subcategories": [
+        "casual",
+        "formal"
+      ]
+    }
+  ];
   return (
-    <div className="hidden space-y-4 lg:block">
-      <div>
-        <p className="block text-xs font-medium text-gray-700">Filters</p>
+    <div className="hidden lg:flex border border-gray-200 rounded-[20px] px-5 py-6 flex-col gap-6">
+      <div className="flex items-center justify-between w-full">
+        <h2 className="text-xl text-black font-bold">
+          Filters
+        </h2>
+        <Filter classNames="w-5 fill-black/40" />
+      </div>
+      <hr className="border-gray-200" />
 
-        <div className="mt-1 space-y-2">
-          <details
-            open
-            className="overflow-hidden rounded-sm border border-gray-300 [&amp;_summary::-webkit-details-marker]:hidden"
-          >
-            <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
-              <span className="text-sm font-medium"> Availability </span>
-
-              <span className="transition group-open:-rotate-180">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  ></path>
-                </svg>
-              </span>
-            </summary>
-
-            <div className="border-t border-gray-200 bg-white">
-              <header className="flex items-center justify-between p-4">
-                <span className="text-sm text-gray-700"> 0 Selected </span>
-
-                <button
-                  type="button"
-                  className="text-sm text-gray-900 underline underline-offset-4"
-                >
-                  Reset
-                </button>
-              </header>
-
-              <ul className="space-y-1 border-t border-gray-200 p-4">
-                <li>
-                  <label
-                    htmlFor="FilterInStock"
-                    className="inline-flex items-center gap-2"
+      <div className="flex flex-col gap-5">
+        {
+          categoriesSample.map((category) => (
+            <details
+              key={category._id}
+              className="overflow-hidden group [&amp;_summary::-webkit-details-marker]:hidden"
+            >
+              <summary className="flex cursor-pointer items-center justify-between gap-2 text-gray-900 transition">
+                <h3 className="text-base text-black/60 capitalize">{category.title}</h3>
+                <span className="transition -rotate-90  group-open:-rotate-0">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-4"
                   >
-                    <input
-                      type="checkbox"
-                      id="FilterInStock"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      In Stock (5+){" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterPreOrder"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterPreOrder"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Pre Order (3+){" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterOutOfStock"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterOutOfStock"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      Out of Stock (10+)
-                    </span>
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </details>
-
-          <details
-            open
-            className="overflow-hidden rounded-sm border border-gray-300 [&amp;_summary::-webkit-details-marker]:hidden"
-          >
-            <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
-              <span className="text-sm font-medium"> Price </span>
-
-              <span className="transition group-open:-rotate-180">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  ></path>
-                </svg>
-              </span>
-            </summary>
-
-            <div className="border-t border-gray-200 bg-white">
-              <header className="flex items-center justify-between p-4">
-                <span className="text-sm text-gray-700">
-                  {" "}
-                  The highest price is $600{" "}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    ></path>
+                  </svg>
                 </span>
+              </summary>
 
-                <button
-                  type="button"
-                  className="text-sm text-gray-900 underline underline-offset-4"
-                >
-                  Reset
-                </button>
-              </header>
-
-              <div className="border-t border-gray-200 p-4">
-                <div className="flex justify-between gap-4">
-                  <label
-                    htmlFor="FilterPriceFrom"
-                    className="flex items-center gap-2"
-                  >
-                    <span className="text-sm text-gray-600">$</span>
-
-                    <input
-                      type="number"
-                      id="FilterPriceFrom"
-                      placeholder="From"
-                      className="w-full rounded-md border-gray-200 shadow-xs sm:text-sm"
-                    />
-                  </label>
-
-                  <label
-                    htmlFor="FilterPriceTo"
-                    className="flex items-center gap-2"
-                  >
-                    <span className="text-sm text-gray-600">$</span>
-
-                    <input
-                      type="number"
-                      id="FilterPriceTo"
-                      placeholder="To"
-                      className="w-full rounded-md border-gray-200 shadow-xs sm:text-sm"
-                    />
-                  </label>
+              <div className="bg-white mt-2">
+                <div className="w-full flex flex-wrap gap-2.5">
+                  {
+                    category.subcategories.map((subcategory: string) => (
+                      <label
+                        key={subcategory}
+                        className="cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="subcategory"
+                          value={subcategory}
+                          className="sr-only peer"
+                          onChange={() => updateFilter('subcategory', subcategory)}
+                        />
+                        <span className="inline-flex items-center rounded-full px-4 py-2 text-sm capitalize transition bg-gray-100 text-gray-900 peer-checked:bg-black peer-checked:text-white hover:bg-gray-200">
+                          {subcategory}
+                        </span>
+                      </label>
+                    ))
+                  }
                 </div>
               </div>
-            </div>
-          </details>
-
-          <details
-            open
-            className="overflow-hidden rounded-sm border border-gray-300 [&amp;_summary::-webkit-details-marker]:hidden"
-          >
-            <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
-              <span className="text-sm font-medium"> Colors </span>
-
-              <span className="transition group-open:-rotate-180">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  ></path>
-                </svg>
-              </span>
-            </summary>
-
-            <div className="border-t border-gray-200 bg-white">
-              <header className="flex items-center justify-between p-4">
-                <span className="text-sm text-gray-700"> 0 Selected </span>
-
-                <button
-                  type="button"
-                  className="text-sm text-gray-900 underline underline-offset-4"
-                >
-                  Reset
-                </button>
-              </header>
-
-              <ul className="space-y-1 border-t border-gray-200 p-4">
-                <li>
-                  <label
-                    htmlFor="FilterRed"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterRed"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Red{" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterBlue"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterBlue"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Blue{" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterGreen"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterGreen"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Green{" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterOrange"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterOrange"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Orange{" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterPurple"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterPurple"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Purple{" "}
-                    </span>
-                  </label>
-                </li>
-
-                <li>
-                  <label
-                    htmlFor="FilterTeal"
-                    className="inline-flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      id="FilterTeal"
-                      className="size-5 rounded-sm border-gray-300 shadow-sm"
-                    />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {" "}
-                      Teal{" "}
-                    </span>
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </details>
-        </div>
+            </details>
+          ))
+        }
       </div>
+
+      <hr className="border-gray-200" />
+
+      <details
+        open
+        className="overflow-hidden group [&amp;_summary::-webkit-details-marker]:hidden"
+      >
+        <summary className="flex cursor-pointer items-center justify-between gap-2 text-gray-900 transition">
+          <h3 className="text-xl text-black font-bold">Price</h3>
+
+          <span className="transition group-open:-rotate-180">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              ></path>
+            </svg>
+          </span>
+        </summary>
+
+        <MultiRangeSlider
+          min={1}
+          max={2000}
+          step={1}
+          onChange={(min: number, max: number) =>
+            updatePrice(min, max)
+          }
+        />
+      </details>
+
+      <hr className="border-gray-200" />
+
+      <details
+        open
+        className="overflow-hidden group [&amp;_summary::-webkit-details-marker]:hidden"
+      >
+        <summary className="flex cursor-pointer items-center justify-between gap-2 text-gray-900 transition">
+          <h3 className="text-xl text-black font-bold">Colors</h3>
+
+          <span className="transition group-open:-rotate-180">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              ></path>
+            </svg>
+          </span>
+        </summary>
+
+        <div className="bg-white mt-2">
+          <div className="w-full flex flex-wrap gap-2.5">
+            {
+              colors.map((color: string) => (
+                <label key={color} className="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="color"
+                    value={color}
+                    checked={filters.colors.includes(color)}
+                    className="sr-only peer"
+                    onChange={(e) =>
+                      updateFilter("color", {
+                        value: color,
+                        checked: e.target.checked,
+                      })
+                    }
+                  />
+                  <span
+                    className={`relative size-9 inline-flex items-center justify-center rounded-full border-2 border-black/20 border-inset transition peer-checked:border-black ${color === '#fff' ? 'peer-checked:bg-custom-checkbox-black' : 'peer-checked:bg-custom-checkbox'} bg-size-[50%] bg-position-[55%_70%] bg-no-repeat`}
+                    style={{ backgroundColor: color }}
+                  />
+                </label>
+              ))
+            }
+          </div>
+        </div>
+      </details>
+
+      <button onClick={() => search()} type="button" className="cursor-pointer bg-black rounded-full text-white text-center py-4 hover:bg-black/60">
+        Apply Filter
+      </button>
     </div>
   );
 };
