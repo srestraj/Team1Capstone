@@ -1,4 +1,4 @@
-import { NextResponse,NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import Product from "@/app/models/Product";
 
@@ -29,10 +29,48 @@ async function connectDB() {
  *       200:
  *         description: List of products
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
-    const products = await Product.find({});
+
+    const url = request.url;
+    const { searchParams } = new URL(url);
+
+    const category: string | null = searchParams.get("category") || null;
+    const minPrice: number | null = parseInt(searchParams.get("minPrice") as string) || null;
+    const maxPrice: number | null = parseInt(searchParams.get("maxPrice") as string) || null;
+    const colorParam = searchParams.get("color");
+
+    const colors: string[] | null = colorParam
+      ? colorParam
+        .split(",")
+        .map(c => decodeURIComponent(c).toLowerCase())
+        .filter(Boolean)
+      : null;
+
+    const query: any = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (colors && colors.length > 0) {
+      query.colors = { $in: colors };
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+
+      if (minPrice) {
+        query.price.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        query.price.$lte = Number(maxPrice);
+      }
+    }
+
+    const products = await Product.find(query);
 
     return NextResponse.json(products, { status: 200 });
   } catch (error: unknown) {
@@ -46,10 +84,10 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const body = await req.json();
-    
+
     // Create the product in MongoDB
     const newProduct = await Product.create(body);
-    
+
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -67,12 +105,12 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json();
     const updated = await Product.findByIdAndUpdate(id, body, { new: true });
-    
+
     return NextResponse.json(updated);
   } catch (error: any) {
-  console.error("DEBUG UPDATE ERROR:", error); 
-  return NextResponse.json({ error: error.message }, { status: 500 });
-}
+    console.error("DEBUG UPDATE ERROR:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 // 4. DELETE (Delete via ?id=...)
