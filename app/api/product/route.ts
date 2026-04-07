@@ -89,6 +89,31 @@ export async function POST(request: NextRequest) {
 
     const product: ProductType = await request.json();
 
+    if (!product.averageRating) {
+      product.averageRating = 0;
+    }
+    if (!product.numberOfReviews) {
+      product.numberOfReviews = 0;
+    }
+    if (!product.colors) {
+      product.colors = [];
+    }
+    if (!product.sizes) {
+      product.sizes = ["M", "L", "XL"];
+    }
+    if (!product.discountPercentage) {
+      product.discountPercentage = 0;
+    }
+    if (!product.currencyCode) {
+      product.currencyCode = "CAD";
+    }
+    if (!product.stock) {
+      product.stock = 99;
+    }
+    if (!product.images || product.images.length === 0) {
+      product.images = [];
+    }
+
     const newProduct = new Product(product);
     await newProduct.save();
 

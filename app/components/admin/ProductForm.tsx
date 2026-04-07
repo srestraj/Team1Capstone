@@ -68,7 +68,7 @@ export default function ProductForm({ editingProduct, formData, setFormData, onS
                 className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
                 type="number" 
                 value={formData.stock || 0} 
-                onChange={e => setFormData({...formData, stock: Number(e.target.value)})} 
+                onChange={e => setFormData({...formData, stock: Number(e.target.value)})}  required
               />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function ProductForm({ editingProduct, formData, setFormData, onS
               className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
               value={formData.category || ""} 
               onChange={e => setFormData({...formData, category: e.target.value})} 
-              placeholder="e.g., Electronics, Clothing"
+              placeholder="e.g., Electronics, Clothing" required
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function ProductForm({ editingProduct, formData, setFormData, onS
               className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
               value={formData.thumbnail || ""} 
               onChange={e => setFormData({...formData, thumbnail: e.target.value})} 
-              placeholder="https://example.com/image.jpg"
+              placeholder="https://example.com/image.jpg" required
             />
             {formData.thumbnail && (
               <div className="mt-4">
@@ -115,7 +115,7 @@ export default function ProductForm({ editingProduct, formData, setFormData, onS
               className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-base resize-none h-32" 
               value={formData.description || ""} 
               onChange={e => setFormData({...formData, description: e.target.value})} 
-              placeholder="Product description..."
+              placeholder="Product description..." required
             />
           </div>
 
