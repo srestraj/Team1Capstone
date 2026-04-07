@@ -44,8 +44,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-const conn = await dbConnect();
-console.log(conn);
+  const conn = await dbConnect();
+  // console.log(conn);
   return (
     <html lang="en">
       <body className={`${satoshiFont.className} antialiased`}>
@@ -53,5 +53,5 @@ console.log(conn);
         <Footer />
       </body>
     </html>
-    );
+  );
 }
