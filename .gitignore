@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# REST API files
+*.rest
+
+# Swagger
+/public/swagger.json
