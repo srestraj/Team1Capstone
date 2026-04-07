@@ -2,9 +2,9 @@ import { ProductType } from "./types/Product";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const fetchProducts = async () => {
+export const fetchProducts = async (queryString?: string) => {
   try {
-    const products: ProductType[] = await fetch(`${BASE_URL}/api/products`, { cache: "no-store" })
+    const products: ProductType[] = await fetch(`${BASE_URL}/api/products${queryString ? `?${queryString}` : ''}`, { cache: "no-store" })
       .then((res) => res.json());
     const sortedProducts = products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     return sortedProducts;
