@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { dbConnect } from "@/app/lib/mongo";
 import Footer from "./components/Footer";
+import { CartProvider } from "./context/CartContext";
 
 const satoshiFont = localFont({
   src: [
@@ -49,7 +50,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshiFont.className} antialiased`}>
-        {children}
+        <CartProvider>{children}</CartProvider>
         <Footer />
       </body>
     </html>
