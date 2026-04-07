@@ -1,3 +1,4 @@
+import { GitBranch } from "lucide-react";
 import type { NextConfig } from "next";
 
 const { NEXT_PUBLIC_SITE_PROTOCOL, NEXT_PUBLIC_SITE_NAME } = process.env;
