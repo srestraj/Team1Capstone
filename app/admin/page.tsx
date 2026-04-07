@@ -112,11 +112,11 @@ export default function AdminDashboard() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest border-b border-gray-100">
-                <th className="px-8 py-5">Product Details</th>
-                <th className="px-8 py-5">Category</th>
-                <th className="px-8 py-5">Price</th>
-                <th className="px-8 py-5">Stock</th>
-                <th className="px-8 py-5 text-right">Actions</th>
+                <th className="px-8 py-5 text-3xl">Product Details</th>
+                <th className="px-8 py-5 text-3xl">Category</th>
+                <th className="px-8 py-5 text-3xl">Price</th>
+                <th className="px-8 py-5 text-3xl">Stock</th>
+                <th className="px-8 py-5 text-3xl text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
