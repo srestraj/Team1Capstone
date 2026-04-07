@@ -4,11 +4,17 @@ import Image from "next/image";
 import formatter from "../utils/priceFormatter";
 import StarRating from "./StarRating";
 
-const ProductCard = ({ product }: { product: ProductType }) => {
+const ProductCard = ({
+  classNames,
+  product,
+}: {
+  classNames?: string;
+  product: ProductType;
+}) => {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="relative group block overflow-hidden"
+      className={`relative group block overflow-hidden ${classNames || ""}`}
     >
       <div className="overflow-hidden md:h-74.5 h-43.5 rounded-[20px] bg-product-bg">
         <Image
@@ -36,10 +42,10 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           <span className="font-bold md:text-2xl text-xl text-black">
             {product.discountPercentage > 0
               ? formatter(
-                  product.price -
-                    (product.price * product.discountPercentage) / 100,
-                  product.currencyCode,
-                )
+                product.price -
+                (product.price * product.discountPercentage) / 100,
+                product.currencyCode,
+              )
               : formatter(product.price, product.currencyCode)}
           </span>
           {product.discountPercentage > 0 && (

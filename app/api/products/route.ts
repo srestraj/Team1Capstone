@@ -69,9 +69,10 @@ export async function PUT(req: NextRequest) {
     const updated = await Product.findByIdAndUpdate(id, body, { new: true });
     
     return NextResponse.json(updated);
-  } catch (error) {
-    return NextResponse.json({ error: "Update failed" }, { status: 500 });
-  }
+  } catch (error: any) {
+  console.error("DEBUG UPDATE ERROR:", error); 
+  return NextResponse.json({ error: error.message }, { status: 500 });
+}
 }
 
 // 4. DELETE (Delete via ?id=...)
