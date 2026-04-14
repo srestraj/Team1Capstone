@@ -1,3 +1,2 @@
-import { handlers } from "@/app/lib/auth";
-console.log("Handlers in auth route:", handlers);
+import { handlers } from "@/app/auth";
 export const { GET, POST } = handlers;
