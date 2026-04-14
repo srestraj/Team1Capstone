@@ -1,10 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Filter from "./icons/Filter";
 import MultiRangeSlider from "./MultiRangeSlider";
+import { Category } from "../utils/types/Product";
 
-const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange: (queryString: string) => void }) => {
+const Filters = ({
+  colors,
+  categories,
+  onFilterChange
+}: {
+  colors: string[];
+  categories: Category[];
+  onFilterChange: (queryString: string) => void
+}) => {
   const [filters, setFilters] = useState<{
     category?: string;
     subcategory?: string;
@@ -14,6 +24,10 @@ const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange:
   }>({
     colors: [],
   });
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const updateFilter = (type: string, payload: any) => {
     if (type === "color") {
@@ -42,52 +56,46 @@ const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange:
   };
 
   const search = () => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
 
     if (filters.category) {
-      params.append("category", filters.category);
+      params.set("category", filters.category);
+    } else {
+      params.delete("category");
+    }
+
+    if (filters.subcategory) {
+      params.set("subcategory", filters.subcategory);
+    } else {
+      params.delete("subcategory");
     }
 
     if (filters.minPrice !== undefined) {
-      params.append("minPrice", String(filters.minPrice));
+      params.set("minPrice", String(filters.minPrice));
+    } else {
+      params.delete("minPrice");
     }
 
     if (filters.maxPrice !== undefined) {
-      params.append("maxPrice", String(filters.maxPrice));
+      params.set("maxPrice", String(filters.maxPrice));
+    } else {
+      params.delete("maxPrice");
     }
 
     if (filters.colors.length > 0) {
-      const encodedColors = filters.colors.map((c) =>
-        encodeURIComponent(c)
+      params.set(
+        "color",
+        filters.colors.map((c) => encodeURIComponent(c)).join(",")
       );
-      params.append("color", encodedColors.join(","));
+    } else {
+      params.delete("color");
     }
 
-    const queryString = params.toString();
+    const queryString: string = params.toString();
+    router.push(`${pathname}?${queryString}`);
 
     onFilterChange(queryString);
   };
-
-  const categoriesSample = [
-    {
-      "_id": "69d47dd6e082ea2c9ee2c809",
-      "title": "jacket",
-      "subcategories": [
-        "bomber",
-        "summer",
-        "winter"
-      ],
-      "__v": 0
-    },
-    {
-      "_id": "69d47dd6e082ea2c9ee2c80a",
-      "title": "t-shirts",
-      "subcategories": [
-        "casual",
-        "formal"
-      ]
-    }
-  ];
   return (
     <div className="hidden lg:flex border border-gray-200 rounded-[20px] px-5 py-6 flex-col gap-6">
       <div className="flex items-center justify-between w-full">
@@ -100,7 +108,7 @@ const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange:
 
       <div className="flex flex-col gap-5">
         {
-          categoriesSample.map((category) => (
+          categories.map((category) => (
             <details
               key={category._id}
               className="overflow-hidden group [&amp;_summary::-webkit-details-marker]:hidden"
@@ -120,7 +128,7 @@ const Filters = ({ colors, onFilterChange }: { colors: string[]; onFilterChange:
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    ></path>
+                    />
                   </svg>
                 </span>
               </summary>
