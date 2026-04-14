@@ -89,6 +89,31 @@ export async function POST(request: NextRequest) {
 
     const product: ProductType = await request.json();
 
+    if (!product.averageRating) {
+      product.averageRating = 0;
+    }
+    if (!product.numberOfReviews) {
+      product.numberOfReviews = 0;
+    }
+    if (!product.colors) {
+      product.colors = [];
+    }
+    if (!product.sizes) {
+      product.sizes = ["M", "L", "XL"];
+    }
+    if (!product.discountPercentage) {
+      product.discountPercentage = 0;
+    }
+    if (!product.currencyCode) {
+      product.currencyCode = "CAD";
+    }
+    if (!product.stock) {
+      product.stock = 99;
+    }
+    if (!product.images || product.images.length === 0) {
+      product.images = [];
+    }
+
     const newProduct = new Product(product);
     await newProduct.save();
 
@@ -98,6 +123,41 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: "Failed to create product" },
       { status: 500 },
+    );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    await connectDB();
+
+    // Get slug from query params
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get("slug");
+
+    if (!slug) {
+      return NextResponse.json(
+        { error: "Slug is required" },
+        { status: 400 }
+      );
+    }
+
+    const product: ProductType | null = await Product.findOne({ slug });
+
+    if (!product) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(product, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching product:", error);
+
+    return NextResponse.json(
+      { error: "Failed to fetch product" },
+      { status: 500 }
     );
   }
 }

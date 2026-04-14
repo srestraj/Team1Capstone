@@ -39,19 +39,19 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
-try {
-  const response = await registerUser(validation.data);
-  console.log("Server Response:", response); 
-  router.push("/login"); 
-}catch (error: any) {
-  if (error.errors) {
-    setErrors(error.errors);
-  } else {
-    setServerError(error.message || "Registration failed");
-  }
-} finally {
-  setLoading(false);
-}
+    try {
+      const response = await registerUser(validation.data);
+      // console.log("Server Response:", response); // Look at your browser console (F12)
+      router.push("/login");
+    } catch (error: any) {
+      if (error.errors) {
+        setErrors(error.errors);
+      } else {
+        setServerError(error.message || "Registration failed");
+      }
+    } finally {
+      setLoading(false);
+    }
 
   }
 
@@ -74,9 +74,8 @@ try {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-black px-1" htmlFor="firstName">First Name</label>
           <input
-            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${
-              errors.firstName ? "border-red-500" : "border-neutral-300 focus:border-black"
-            }`}
+            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${errors.firstName ? "border-red-500" : "border-neutral-300 focus:border-black"
+              }`}
             id="firstName"
             name="firstName"
             type="text"
@@ -89,9 +88,8 @@ try {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-black px-1" htmlFor="lastName">Last Name</label>
           <input
-            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${
-              errors.lastName ? "border-red-500" : "border-neutral-300 focus:border-black"
-            }`}
+            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${errors.lastName ? "border-red-500" : "border-neutral-300 focus:border-black"
+              }`}
             id="lastName"
             name="lastName"
             type="text"
@@ -104,9 +102,8 @@ try {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-black px-1" htmlFor="email">Email Address</label>
           <input
-            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${
-              errors.email ? "border-red-500" : "border-neutral-300 focus:border-black"
-            }`}
+            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${errors.email ? "border-red-500" : "border-neutral-300 focus:border-black"
+              }`}
             id="email"
             name="email"
             type="email"
@@ -119,9 +116,8 @@ try {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-black px-1" htmlFor="address">Address</label>
           <input
-            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${
-              errors.address ? "border-red-500" : "border-neutral-300 focus:border-black"
-            }`}
+            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${errors.address ? "border-red-500" : "border-neutral-300 focus:border-black"
+              }`}
             id="address"
             name="address"
             type="text"
@@ -134,14 +130,13 @@ try {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-black px-1" htmlFor="password">Password</label>
           <input
-            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${
-              errors.password ? "border-red-500" : "border-neutral-300 focus:border-black"
-            }`}
+            className={`w-full rounded-full bg-neutral-50 px-4 py-2.5 border transition focus:outline-none text-black ${errors.password ? "border-red-500" : "border-neutral-300 focus:border-black"
+              }`}
             id="password"
             name="password"
             type="password"
             placeholder="••••••••"
-            
+
           />
           {errors.password && <p className="text-red-500 text-xs pl-4 font-medium">{errors.password}</p>}
         </div>
