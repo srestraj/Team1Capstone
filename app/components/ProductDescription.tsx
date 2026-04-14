@@ -6,6 +6,7 @@ import formatter from "../utils/priceFormatter"
 import { ProductType } from "../utils/types/Product"
 import StarRating from "./StarRating"
 import { useCart } from "../context/CartContext"
+import { toast } from "react-toastify"
 
 const ProductDescription = ({ product }: { product: ProductType }) => {
   const { addToCart } = useCart()
@@ -15,7 +16,7 @@ const ProductDescription = ({ product }: { product: ProductType }) => {
 
   const handleAddToCart = () => {
     if (!selectedSize || !selectedColor) {
-      alert("Please select size and color")
+      toast.warning("Please select size and color");
       return
     }
 
@@ -25,6 +26,7 @@ const ProductDescription = ({ product }: { product: ProductType }) => {
       selectedSize,
       selectedColor,
     })
+    toast.success("Product added to cart!");
   }
 
   return (
@@ -42,10 +44,10 @@ const ProductDescription = ({ product }: { product: ProductType }) => {
         <span className="text-3xl font-bold">
           {product.discountPercentage > 0
             ? formatter(
-                product.price -
-                  (product.price * product.discountPercentage) / 100,
-                product.currencyCode
-              )
+              product.price -
+              (product.price * product.discountPercentage) / 100,
+              product.currencyCode
+            )
             : formatter(product.price, product.currencyCode)}
         </span>
       </div>
@@ -67,10 +69,9 @@ const ProductDescription = ({ product }: { product: ProductType }) => {
               key={size}
               onClick={() => setSelectedSize(size)}
               className={`px-6 py-3 rounded-full text-sm font-medium transition-all
-                ${
-                  selectedSize === size
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                ${selectedSize === size
+                  ? "bg-black text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
             >
               {size}
@@ -87,20 +88,20 @@ const ProductDescription = ({ product }: { product: ProductType }) => {
         <div className="flex flex-wrap gap-2.5">
           {product.colors.map((color: string) => (
             <label key={color} className="cursor-pointer">
-                <input
+              <input
                 type="radio"
                 name="color"
                 value={color}
                 checked={selectedColor === color}
                 className="sr-only peer"
                 onChange={(e) =>
-                    setSelectedColor(e.target.value)
+                  setSelectedColor(e.target.value)
                 }
-                />
-                <span
+              />
+              <span
                 className={`relative size-9 inline-flex items-center justify-center rounded-full border-2 border-black/20 border-inset transition peer-checked:border-black ${color === '#fff' ? 'peer-checked:bg-custom-checkbox-black' : 'peer-checked:bg-custom-checkbox'} bg-size-[50%] bg-position-[55%_70%] bg-no-repeat`}
                 style={{ backgroundColor: color }}
-                />
+              />
             </label>
           ))}
         </div>

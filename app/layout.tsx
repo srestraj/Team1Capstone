@@ -5,6 +5,8 @@ import { dbConnect } from "@/app/lib/mongo";
 import Footer from "./components/Footer";
 import Navbar from "./components/navbar";
 import Providers from "./providers";
+import { CartProvider } from "./context/CartContext";
+import { ToastContainer } from "react-toastify";
 
 const satoshiFont = localFont({
   src: [
@@ -55,6 +57,7 @@ export default async function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          <ToastContainer />
         </Providers>
       </body>
     </html>
