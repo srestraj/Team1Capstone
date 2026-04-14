@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   ChevronLeft,
   Package,
   Truck,
@@ -100,7 +100,7 @@ export default function OrderStatusPage() {
       {/* Header */}
       <div className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <button 
+          <button
             onClick={() => router.push("/")}
             className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors"
           >
@@ -130,15 +130,14 @@ export default function OrderStatusPage() {
                   <p className="font-medium">Apr 14, 2026</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-gray-600">Status:</span>
-                <span className={`px-3 py-1 rounded-full font-medium ${
-                  currentStep === 1 ? 'bg-yellow-100 text-yellow-800' :
-                  currentStep === 2 ? 'bg-blue-100 text-blue-800' :
-                  currentStep === 3 ? 'bg-purple-100 text-purple-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
+                <span className={`px-3 py-1 rounded-full font-medium ${currentStep === 1 ? 'bg-yellow-100 text-yellow-800' :
+                    currentStep === 2 ? 'bg-blue-100 text-blue-800' :
+                      currentStep === 3 ? 'bg-purple-100 text-purple-800' :
+                        'bg-green-100 text-green-800'
+                  }`}>
                   {currentStep === 1 && "Order Placed"}
                   {currentStep === 2 && "Processing"}
                   {currentStep === 3 && "Shipped"}
@@ -156,7 +155,7 @@ export default function OrderStatusPage() {
 
               <div className="relative">
                 <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                
+
                 <div className="space-y-8">
                   {orderStatuses.map((status) => (
                     <div key={status.step} className="relative flex gap-4">
@@ -166,7 +165,7 @@ export default function OrderStatusPage() {
                         {status.step === 3 && <Truck className="w-6 h-6 text-white" />}
                         {status.step === 4 && <CheckCircle className="w-6 h-6 text-white" />}
                       </div>
-                      
+
                       <div className="flex-1 pt-1">
                         <div className="flex items-center justify-between mb-1">
                           <h3 className={`font-bold text-lg ${status.completed || status.current ? 'text-black' : 'text-gray-400'}`}>
@@ -179,7 +178,7 @@ export default function OrderStatusPage() {
                         <p className={`text-sm ${status.completed || status.current ? 'text-gray-600' : 'text-gray-400'}`}>
                           {status.description}
                         </p>
-                        
+
                         {status.current && (
                           <div className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
                             <Clock className="w-3 h-3" />
@@ -212,15 +211,15 @@ export default function OrderStatusPage() {
           <div className="lg:col-span-5">
             <div className="bg-gray-50 rounded-2xl p-6 sticky top-4">
               <h3 className="text-xl font-semibold mb-6">Order Summary</h3>
-              
+
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                 {cart.length > 0 ? cart.map((item: any, index: number) => (
                   <div key={index} className="flex gap-3">
                     <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 border">
-                      <img 
-                        src={item.product?.thumbnail || '/placeholder.jpg'} 
-                        alt={item.product?.title || 'Product'} 
-                        className="w-full h-full object-cover" 
+                      <img
+                        src={item.product?.thumbnail || '/placeholder.jpg'}
+                        alt={item.product?.title || 'Product'}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex-1">
@@ -253,8 +252,8 @@ export default function OrderStatusPage() {
                 </div>
               </div>
 
-              <button 
-                onClick={() => router.push("/")}
+              <button
+                onClick={() => router.push("/shop")}
                 className="w-full bg-black text-white py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-gray-800 transition-all mt-6"
               >
                 <ShoppingBag className="w-5 h-5" />
