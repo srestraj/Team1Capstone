@@ -39,27 +39,19 @@ export const fetchSingleProduct = async (slug: string) => {
 }
 
 export const loginUser = async (email: string, password: string) => {
-  const response = await fetch(`${BASE_URL}/api/login`, {
+  const res = await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
-    cache: "no-store",
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Login failed");
+  
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
-
-  // Store JWT in browser
-  if (data.token) {
-    localStorage.setItem("token", data.token);
-  }
-
-  return data;
-}
-
+  
+  return res.json(); // Returns { message, token }
+};
 
 export const registerUser = async (userData: {
   firstName: string;

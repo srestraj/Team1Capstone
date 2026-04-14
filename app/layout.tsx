@@ -5,6 +5,7 @@ import { dbConnect } from "@/app/lib/mongo";
 import Footer from "./components/Footer";
 import Navbar from "./components/navbar";
 import { CartProvider } from "./context/CartContext";
+import Providers from "./providers";
 
 const satoshiFont = localFont({
   src: [
@@ -51,9 +52,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshiFont.className} antialiased`}>
-        <Navbar />
-        <CartProvider>{children}</CartProvider>
-        <Footer />
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

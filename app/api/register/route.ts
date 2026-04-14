@@ -117,7 +117,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const { firstName, lastName, email, address, password } = validation.data;
+    const { firstName, lastName, email, address, password ,role} = validation.data;
 
     // 2. Connect to MongoDB
     await dbConnect();
@@ -132,11 +132,12 @@ export const POST = async (req: NextRequest) => {
       email: email.toLowerCase(),
       address,
       password: hashedPassword,
+      role: role || "user"
     });
 
     // 5. Generate JWT
     const token = jwt.sign(
-      { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}` },
+      { id: user._id.toString(), email: user.email, name: `${user.firstName} ${user.lastName}`, role: user.role },
       JWT_SECRET as string,
       { expiresIn: "7d" }
     );
@@ -161,5 +162,33 @@ export const POST = async (req: NextRequest) => {
       { message: "Server error" },
       { status: 500 }
     );
+  }
+};
+export const DELETE = async (req: NextRequest) => {
+  try {
+    await dbConnect();
+    
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+    const deleteAll = searchParams.get("all") === "true"; // Look for ?all=true
+
+    if (deleteAll) {
+      await User.deleteMany({}); // Deletes every document in the collection
+      return NextResponse.json({ message: "All users deleted successfully" }, { status: 200 });
+    }
+
+    if (!email) {
+      return NextResponse.json({ message: "Email or 'all=true' parameter required" }, { status: 400 });
+    }
+
+    const deletedUser = await User.findOneAndDelete({ email: email.toLowerCase() });
+
+    if (!deletedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
+  } catch (err: any) {
+    return NextResponse.json({ message: "Server error", error: err.message }, { status: 500 });
   }
 };

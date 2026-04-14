@@ -4,14 +4,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginSchema } from "@/app/lib/zod";
 import { loginUser } from "@/app/utils/apiService";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+    const { login } = useAuth();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors({});
     setServerError("");
@@ -33,9 +35,34 @@ export default function LoginPage() {
     }
 
     try {
-      await loginUser(validation.data.email, validation.data.password);
-      router.push("/");
+      const response = await loginUser(validation.data.email, validation.data.password);
+      
+      // Debug: Log everything
+      console.log("=== LOGIN DEBUG ===");
+      console.log("Response:", response);
+      console.log("Token:", response.token);
+      
+      // Decode token manually to check
+      const payload = JSON.parse(atob(response.token.split('.')[1]));
+      console.log("Decoded Payload:", payload);
+      console.log("Role from payload:", payload.role);
+      console.log("Is admin?:", payload.role === "admin");
+
+      // Save to context FIRST
+      login(response.token);
+      
+      // Use payload for immediate redirect (context update is async)
+      const isAdmin = payload.role === "admin";
+      console.log("Redirecting to:", isAdmin ? "/admin" : "/");
+      
+      if (isAdmin) {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+      
     } catch (error: any) {
+      console.error("Login error:", error);
       setServerError(error.message || "Login failed");
     } finally {
       setLoading(false);
