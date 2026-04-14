@@ -89,6 +89,8 @@ export async function POST(request: NextRequest) {
 
     const product: ProductType = await request.json();
 
+    return console.log(product);
+
     if (!product.averageRating) {
       product.averageRating = 0;
     }
