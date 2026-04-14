@@ -137,24 +137,24 @@ export default function Navbar() {
     }
   };
 
-  useEffect(() => {
-    // debounce
-    const timeout = setTimeout(() => {
-      const params = new URLSearchParams(window.location.search);
+  // useEffect(() => {
+  //   // debounce
+  //   const timeout = setTimeout(() => {
+  //     const params = new URLSearchParams(window.location.search);
 
-      if (searchQuery.trim()) {
-        params.set("q", searchQuery);
-      } else {
-        params.delete("q");
-      }
+  //     if (searchQuery.trim()) {
+  //       params.set("q", searchQuery);
+  //     } else {
+  //       params.delete("q");
+  //     }
 
-      router.push(`/shop?${params.toString()}`, {
-        scroll: false,
-      });
-    }, 400);
+  //     router.push(`/shop?${params.toString()}`, {
+  //       scroll: false,
+  //     });
+  //   }, 400);
 
-    return () => clearTimeout(timeout);
-  }, [searchQuery]);
+  //   return () => clearTimeout(timeout);
+  // }, [searchQuery]);
 
   return (
     <header className="w-full">

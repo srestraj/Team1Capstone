@@ -40,8 +40,45 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const body = await req.json();
-    const category = await Category.create(body);
+    const { title, subcategories } = body;
+    const category = await Category.create({
+      title,
+      subcategories: Array.isArray(subcategories) ? subcategories : [],
+    });
     return NextResponse.json(category, { status: 201 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    await connectDB();
+    const body = await req.json();
+    const { id, ...updateData } = body;
+    const category = await Category.findByIdAndUpdate(id, updateData, { new: true });
+    if (!category) {
+      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    } 
+    return NextResponse.json(category, { status: 200 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  } 
+}
+
+export async function DELETE(req: NextRequest) {  
+  try { 
+    await connectDB();    
+
+    const body = await req.json();
+    const { id } = body;
+    const category = await Category.findByIdAndDelete(id);
+    if (!category) {
+      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    }
+    return NextResponse.json({ message: "Category deleted" }, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });

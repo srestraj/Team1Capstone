@@ -9,7 +9,6 @@ export async function GET() {
     await dbConnect();
 
     // 2. Fetch all users
-    // .select("-password") is important so you don't send hashes to Postman
     const users = await User.find({}).select("-password");
 
     // 3. Return the data

@@ -49,9 +49,27 @@ export default function AdminDashboard() {
     }
   };
 
+  const addCategory = async (category: string) => {
+    try {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: category })
+      });
+      if (res.ok) {
+console.log("Category added successfully");
+        } else {
+console.error("Failed to add category");
+        }
+    } catch {
+      showToast("error", "Failed to connect to Database");
+    }
+  };
+
+
   const handleOpenForm = (product: Product | null = null) => {
     setEditingProduct(product);
-    setFormData(product ? { ...product } : { title: '', price: 0, stock: 0, category: '', thumbnail: '' });
+    setFormData(product ? { ...product } : { title: '', price: 0, stock: 0, category: '', subcategory: '', thumbnail: '' });
     setView('form');
   };
 
