@@ -1,10 +1,19 @@
-    "use client";
+"use client";
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+type User = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+};
+
 type AuthContextType = {
   token: string | null;
-  user: { email: string; name: string; role: string } | null;
+  user: User | null;
+  isLoading: boolean;
   login: (token: string) => void;
   logout: () => void;
 };
@@ -13,18 +22,22 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<{ email: string; name: string; role: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Load from localStorage
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      setToken(storedToken);
-      // Decode JWT to get user info
-      const payload = JSON.parse(atob(storedToken.split('.')[1]));
-      setUser(payload);
+      try {
+        const payload = JSON.parse(atob(storedToken.split('.')[1]));
+        setToken(storedToken);
+        setUser(payload);
+      } catch (error) {
+        localStorage.removeItem("token");
+      }
     }
+    setIsLoading(false);
   }, []);
 
   const login = (newToken: string) => {
@@ -42,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
