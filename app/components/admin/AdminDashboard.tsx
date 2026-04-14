@@ -69,7 +69,7 @@ console.error("Failed to add category");
 
   const handleOpenForm = (product: Product | null = null) => {
     setEditingProduct(product);
-    setFormData(product ? { ...product } : { title: '', price: 0, stock: 0, category: '', subcategory: '', thumbnail: '' });
+    setFormData(product ? { ...product } : { title: '', price: 0, stock: 0, category: '', subCategory: '', thumbnail: '' });
     setView('form');
   };
 
