@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // router ke liye
+import { useRouter } from "next/navigation";
 import {
   Search,
   ShoppingCart,
@@ -31,30 +31,31 @@ interface UserData {
 
 export default function Navbar() {
   const router = useRouter(); // router hook
-  const [showPromo, setShowPromo] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  
+  const [showPromo, setShowPromo] = useState<boolean>(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+
   // Authentication states
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("");
+  const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Check login status on mount (localStorage se)
+  // Check login status on mount
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("token");
       const storedUserName = localStorage.getItem("userName");
-      
+
       if (token && storedUserName) {
         setIsLoggedIn(true);
         setUserName(storedUserName);
       }
     };
-    
+
     checkAuth();
-    
+
     // Event listener for auth changes (custom event)
     window.addEventListener("authChange", checkAuth);
     return () => window.removeEventListener("authChange", checkAuth);
@@ -67,22 +68,34 @@ export default function Navbar() {
         setShowProfileDropdown(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSearch = (event?: React.SubmitEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    const params = new URLSearchParams(window.location.search);
+    params.set("q", searchQuery);
+    const url = `/shop?${params.toString()}`;
+
+    router.replace(url);
+    router.refresh();
+  };
 
   const handleLogout = () => {
     // Clear localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     localStorage.removeItem("userEmail");
-    
+
     // Update states
     setIsLoggedIn(false);
     setUserName("");
     setShowProfileDropdown(false);
-    
+
     // Redirect to home
     router.push("/");
   };
@@ -107,23 +120,41 @@ export default function Navbar() {
         },
         body: JSON.stringify(credentials)
       });
-      
+
       const data: UserData = await response.json();
-      
+
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userName", data.user.name);
         localStorage.setItem("userEmail", data.user.email);
-        
-        // Navbar update karne ke liye custom event
+
         window.dispatchEvent(new Event("authChange"));
-        
+
         router.push("/");
       }
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+
+  // useEffect(() => {
+  //   // debounce
+  //   const timeout = setTimeout(() => {
+  //     const params = new URLSearchParams(window.location.search);
+
+  //     if (searchQuery.trim()) {
+  //       params.set("q", searchQuery);
+  //     } else {
+  //       params.delete("q");
+  //     }
+
+  //     router.push(`/shop?${params.toString()}`, {
+  //       scroll: false,
+  //     });
+  //   }, 400);
+
+  //   return () => clearTimeout(timeout);
+  // }, [searchQuery]);
 
   return (
     <header className="w-full">
@@ -178,12 +209,17 @@ export default function Navbar() {
           {/* Search (desktop center) */}
           <div className="hidden md:flex flex-1 justify-center px-4">
             <div className="relative w-full max-w-2xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for products..."
-                className="w-full rounded-full bg-gray-100 pl-12 pr-4 py-3 text-sm outline-none ring-1 ring-transparent focus:bg-white focus:ring-gray-300"
-              />
+              <form onSubmit={handleSearch} className="relative w-full max-w-2xl">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+                <input
+                  type="text"
+                  placeholder="Search for products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-full bg-gray-100 pl-12 pr-4 py-3 text-sm outline-none ring-1 ring-transparent focus:bg-white focus:ring-gray-300"
+                />
+              </form>
             </div>
           </div>
 
@@ -214,10 +250,9 @@ export default function Navbar() {
                     <span className="text-sm font-medium text-gray-900">
                       {userName.split(" ")[0]}
                     </span>
-                    <ChevronDown 
-                      className={`h-4 w-4 text-gray-500 transition-transform ${
-                        showProfileDropdown ? "rotate-180" : ""
-                      }`} 
+                    <ChevronDown
+                      className={`h-4 w-4 text-gray-500 transition-transform ${showProfileDropdown ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
 
@@ -230,7 +265,7 @@ export default function Navbar() {
                           {typeof window !== 'undefined' ? localStorage.getItem("userEmail") : ''}
                         </p>
                       </div>
-                      
+
                       <Link
                         href="/profile"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -239,7 +274,7 @@ export default function Navbar() {
                         <User className="h-4 w-4" />
                         My Profile
                       </Link>
-                      
+
                       <Link
                         href="/orders"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -248,7 +283,7 @@ export default function Navbar() {
                         <ShoppingCart className="h-4 w-4" />
                         My Orders
                       </Link>
-                      
+
                       <Link
                         href="/settings"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -257,7 +292,7 @@ export default function Navbar() {
                         <Settings className="h-4 w-4" />
                         Settings
                       </Link>
-                      
+
                       <div className="border-t border-gray-100 mt-1">
                         <button
                           onClick={handleLogout}
@@ -304,12 +339,17 @@ export default function Navbar() {
             <div className="mx-auto max-w-7xl px-4 py-4 space-y-4">
               {/* Mobile search */}
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full rounded-full bg-gray-100 pl-12 pr-4 py-3 text-sm outline-none ring-1 ring-transparent focus:bg-white focus:ring-gray-300"
-                />
+                <form onSubmit={handleSearch} className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+                  <input
+                    type="text"
+                    placeholder="Search for products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full rounded-full bg-gray-100 pl-12 pr-4 py-3 text-sm outline-none ring-1 ring-transparent focus:bg-white focus:ring-gray-300"
+                  />
+                </form>
               </div>
 
               {/* Mobile nav links */}
@@ -362,7 +402,7 @@ export default function Navbar() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <Link
                     href="/profile"
                     className="flex items-center gap-2 rounded-md px-2 py-2 hover:bg-gray-100"
@@ -371,7 +411,7 @@ export default function Navbar() {
                     <User className="h-4 w-4" />
                     My Profile
                   </Link>
-                  
+
                   <Link
                     href="/orders"
                     className="flex items-center gap-2 rounded-md px-2 py-2 hover:bg-gray-100"
@@ -380,7 +420,7 @@ export default function Navbar() {
                     <ShoppingCart className="h-4 w-4" />
                     My Orders
                   </Link>
-                  
+
                   <button
                     onClick={() => {
                       handleLogout();

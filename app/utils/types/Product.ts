@@ -51,3 +51,20 @@ export type StarType = {
 export type IconType = {
   classNames?: string;
 }
+
+export type SearchProps = {
+  searchParams: {
+    q?: string;
+    category?: string;
+    subcategory?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    color?: string;
+  }
+}
+
+export type Category = {
+  _id: string;
+  title: string;
+  subcategories: string[];
+};

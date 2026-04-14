@@ -98,3 +98,14 @@ export const registerUser = async (userData: {
 export const getToken = () => {
   return typeof window !== "undefined" ? localStorage.getItem("token") : null;
 };
+
+export const fetchCategories = async () => {
+  try {
+    const categories = await fetch(`${BASE_URL}/api/categories`, { cache: "no-store" })
+      .then((res) => res.json());
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+}
