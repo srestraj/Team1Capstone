@@ -16,10 +16,11 @@
     "lucide-react": "^1.7.0",
     "mongoose": "^9.2.1",
     "next": "16.1.6",
-    "next-auth": "^4.24.13",
+    "next-auth": "^5.0.0-beta.30",
     "next-swagger-doc": "^0.4.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-toastify": "^11.0.5",
     "swagger-ui-react": "^5.32.1",
     "zod": "^4.3.6"
   },

@@ -9,6 +9,7 @@ export type Product = {
   colors?: string[];
   sizes?: string[];
   thumbnail?: string;
+  images?: string[];
   stock?: number;
   discountPercentage?: number;
   currencyCode?: string;

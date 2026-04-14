@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: (NEXT_PUBLIC_SITE_PROTOCOL || "https") as "http" | "https",
-        hostname: "pexels.com",
+        hostname: "images.pexels.com",
         pathname: "/**",
       }
     ],

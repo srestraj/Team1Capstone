@@ -1,9 +1,12 @@
 // components/admin/ProductForm.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Product, Category } from "./types";
+import ImageUploader from "../ImageUploader";
+import DropZone from "../DropZone";
+import { useImageUpload } from "../ImageUpload";
 
 interface ProductFormProps {
   editingProduct: Product | null;
@@ -76,6 +79,29 @@ export default function ProductForm({
       subCategory: "",
     });
   };
+  const { uploadImages, uploading, progress } = useImageUpload();
+
+  const handleFilesSelected = async (files: File[]) => {
+    // preview immediately
+    const previews = files.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [...(prev.images || []), ...previews],
+    }));
+
+    // upload
+    const uploaded = await uploadImages(files);
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [
+        ...(prev.images || []).filter((img) => !img.startsWith("blob:")),
+        ...uploaded,
+      ],
+    }));
+  };
+
   return (
     <>
       <header className="mb-12">
@@ -222,28 +248,27 @@ export default function ProductForm({
           )}
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
-              Thumbnail URL
-            </label>
-            <input
-              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg"
-              value={formData.thumbnail || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, thumbnail: e.target.value })
+            <ImageUploader
+              presetImage={formData.thumbnail}
+              onImageUpload={(url) =>
+                setFormData({ ...formData, thumbnail: url })
               }
-              placeholder="https://example.com/image.jpg"
-              required
             />
-            {formData.thumbnail && (
-              <div className="mt-4">
-                <img
-                  src={formData.thumbnail}
-                  alt="Preview"
-                  className="w-32 h-32 object-cover rounded-2xl border border-gray-100"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
-              </div>
-            )}
+          </div>
+
+          <div className="space-y-2">
+            <DropZone
+              images={formData.images || []}
+              uploading={uploading}
+              progress={progress}
+              onFilesSelected={handleFilesSelected}
+              onDeleteImage={(index) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  images: prev.images?.filter((_, i) => i !== index),
+                }));
+              }}
+            />
           </div>
 
           <div className="space-y-2">
@@ -273,14 +298,16 @@ export default function ProductForm({
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
+            <label
+              htmlFor="color"
+              className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1"
+            >
               Colors
             </label>
 
             <div className="flex flex-wrap gap-3">
               <input
-                type="text"
-                placeholder="e.g. Black,White,Blue"
+                type="color"
                 value={colorsInput}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -293,7 +320,8 @@ export default function ProductForm({
                       .filter(Boolean), // remove empty values
                   });
                 }}
-                className="w-full rounded-lg border border-zinc-200 px-4 py-2"
+                id="color"
+                className="w-16 h-16 rounded-xl"
               />
             </div>
           </div>

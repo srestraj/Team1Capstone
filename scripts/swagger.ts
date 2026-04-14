@@ -17,7 +17,11 @@ const spec = createSwaggerSpec({
       },
     ],
   },
-  apis: [path.join(process.cwd(), "app/api/**/*.{ts,tsx}")],
+  apis: [
+    path.join(process.cwd(), "app/api/**/*.ts"),
+    path.join(process.cwd(), "app/api/**/*.tsx"),
+    "!**/api/auth/**",
+  ],
 });
 
 fs.writeFileSync("./public/swagger.json", JSON.stringify(spec, null, 2));

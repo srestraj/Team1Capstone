@@ -13,11 +13,11 @@ const productSchema = new Schema<ProductDocument>(
     gender: String,
     category: String,
     subCategory: String,
-    averageRating: Number,
-    numberOfReviews: Number,
-    stock: Number,
-    colors: [String],
-    sizes: [String],
+    averageRating: { type: Number, default: 0 },
+    numberOfReviews: { type: Number, default: 0 },
+    stock: { type: Number, default: 99 },
+    colors: { type: [String], default: [] },
+    sizes: { type: [String], default: ["M", "L", "XL"] },
     slug: { type: String, unique: true, index: true }
   },
   { timestamps: true }

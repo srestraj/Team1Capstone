@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { dbConnect } from "@/app/lib/mongo";
 
 // 1. Initialize NextAuth
-const { handlers: authHandlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
@@ -43,12 +43,3 @@ const { handlers: authHandlers, auth, signIn, signOut } = NextAuth({
   },
   pages: { signIn: "/Login" },
 });
-
-// 2. Export them clearly
-export const handlers = authHandlers;
-export const authFunction = auth; 
-export const signInFunction = signIn;
-export const signOutFunction = signOut;
-
-// This export style is what the API route needs
-export { auth, signIn, signOut };
