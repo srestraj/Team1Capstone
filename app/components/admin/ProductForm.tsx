@@ -1,9 +1,12 @@
 // components/admin/ProductForm.tsx
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { Product,Category } from "./types";
+import { Product, Category } from "./types";
+import ImageUploader from "../ImageUploader";
+import DropZone from "../DropZone";
+import { useImageUpload } from "../ImageUpload";
 
 interface ProductFormProps {
   editingProduct: Product | null;
@@ -14,9 +17,9 @@ interface ProductFormProps {
 }
 
 export default function ProductForm({ editingProduct, formData, setFormData, onSubmit, onCancel }: ProductFormProps) {
-   const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-   useEffect(() => {
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await fetch("/api/categories", { cache: "no-store" });
@@ -30,12 +33,12 @@ export default function ProductForm({ editingProduct, formData, setFormData, onS
     };
     fetchCategories();
   }, []);
-console.log("Available categories:", categories);
+  console.log("Available categories:", categories);
   // Get selected category's subcategories
   const selectedCategory = categories.find(cat => cat.title === formData.category);
   const availableSubcategories = selectedCategory?.subcategories || [];
 
-useEffect(() => {
+  useEffect(() => {
     if (!loadingCategories && editingProduct && categories.length > 0) {
       const matchedCat = categories.find(c => c.title === editingProduct.category);
       if (matchedCat && matchedCat.subcategories && matchedCat.subcategories.includes(editingProduct.subCategory || "")) {
@@ -47,20 +50,43 @@ useEffect(() => {
     }
   }, [loadingCategories, categories, editingProduct, setFormData]);
 
-   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCategory = e.target.value;
-    setFormData({ 
-      ...formData, 
+    setFormData({
+      ...formData,
       category: newCategory,
       subCategory: "" // Reset subcategory when category changes
     });
   };
+  const { uploadImages, uploading, progress } = useImageUpload();
+
+  const handleFilesSelected = async (files: File[]) => {
+    // preview immediately
+    const previews = files.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [...(prev.images || []), ...previews],
+    }));
+
+    // upload
+    const uploaded = await uploadImages(files);
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [
+        ...(prev.images || []).filter((img) => !img.startsWith("blob:")),
+        ...uploaded,
+      ],
+    }));
+  };
+
   return (
 
 
     <>
       <header className="mb-12">
-        <button 
+        <button
           onClick={onCancel}
           className="flex items-center gap-2 text-gray-400 hover:text-black transition-colors mb-6 font-bold uppercase text-xs tracking-widest"
         >
@@ -80,12 +106,12 @@ useEffect(() => {
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
               Product Title
             </label>
-            <input 
-              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
-              value={formData.title || ""} 
-              onChange={e => setFormData({...formData, title: e.target.value})} 
+            <input
+              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg"
+              value={formData.title || ""}
+              onChange={e => setFormData({ ...formData, title: e.target.value })}
               placeholder="Enter product name"
-              required 
+              required
             />
           </div>
 
@@ -94,28 +120,28 @@ useEffect(() => {
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
                 Price (CAD)
               </label>
-              <input 
-                className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
-                type="number" 
+              <input
+                className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg"
+                type="number"
                 step="0.01"
-                value={formData.price || 0} 
-                onChange={e => setFormData({...formData, price: Number(e.target.value)})} 
-                required 
+                value={formData.price || 0}
+                onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
+                required
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
                 Stock Quantity
               </label>
-              <input 
-                className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
-                type="number" 
-                value={formData.stock || 0} 
-                onChange={e => setFormData({...formData, stock: Number(e.target.value)})}  required
+              <input
+                className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg"
+                type="number"
+                value={formData.stock || 0}
+                onChange={e => setFormData({ ...formData, stock: Number(e.target.value) })} required
               />
             </div>
           </div>
-   <div className="space-y-2">
+          <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
               Category *
             </label>
@@ -126,11 +152,11 @@ useEffect(() => {
             ) : (
               <div className="relative">
                 <select
-  value={formData.category || ""}
-  onChange={handleCategoryChange}
-  className="w-full bg-gray-50 border-none p-5 rounded-2xl font-bold text-lg appearance-none cursor-pointer"
-  required
->
+                  value={formData.category || ""}
+                  onChange={handleCategoryChange}
+                  className="w-full bg-gray-50 border-none p-5 rounded-2xl font-bold text-lg appearance-none cursor-pointer"
+                  required
+                >
                   <option value="">Select a category</option>
                   {categories.map((category) => (
                     <option key={category._id} value={category.title}>
@@ -138,10 +164,10 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
-                <svg 
+                <svg
                   className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -169,10 +195,10 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
-                <svg 
+                <svg
                   className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -182,47 +208,44 @@ useEffect(() => {
           )}
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
-              Thumbnail URL
-            </label>
-            <input 
-              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-lg" 
-              value={formData.thumbnail || ""} 
-              onChange={e => setFormData({...formData, thumbnail: e.target.value})} 
-              placeholder="https://example.com/image.jpg" required
+            <ImageUploader presetImage={formData.thumbnail} onImageUpload={(url) => setFormData({ ...formData, thumbnail: url })} />
+          </div>
+
+          <div className="space-y-2">
+            <DropZone
+              images={formData.images || []}
+              uploading={uploading}
+              progress={progress}
+              onFilesSelected={handleFilesSelected}
+              onDeleteImage={(index) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  images: prev.images?.filter((_, i) => i !== index),
+                }));
+              }}
             />
-            {formData.thumbnail && (
-              <div className="mt-4">
-                <img 
-                  src={formData.thumbnail} 
-                  alt="Preview" 
-                  className="w-32 h-32 object-cover rounded-2xl border border-gray-100"
-                  onError={(e) => (e.currentTarget.style.display = 'none')}
-                />
-              </div>
-            )}
           </div>
 
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-1">
               Description
             </label>
-            <textarea 
-              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-base resize-none h-32" 
-              value={formData.description || ""} 
-              onChange={e => setFormData({...formData, description: e.target.value})} 
+            <textarea
+              className="w-full bg-gray-50 border-none p-5 rounded-2xl focus:ring-2 focus:ring-black outline-none font-bold text-base resize-none h-32"
+              value={formData.description || ""}
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
               placeholder="Product description..." required
             />
           </div>
 
           <div className="flex gap-4 pt-4">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="flex-1 bg-black text-white py-5 rounded-full font-black uppercase tracking-widest hover:bg-gray-900 transition-all shadow-xl"
             >
               {editingProduct ? "Update Product" : "Create Product"}
             </button>
-            <button 
+            <button
               type="button"
               onClick={onCancel}
               className="px-10 py-5 bg-gray-100 text-gray-600 rounded-full font-black uppercase tracking-widest hover:bg-gray-200 transition-all"
