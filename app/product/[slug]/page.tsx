@@ -21,7 +21,7 @@ export default async function ProductPage({
     const product: any = await fetchProduct(slug);
 
     return (
-        <div className="min-h-screen bg-white font-sans">
+        <div className="min-h-screen bg-white font-sans py-24">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Left Column - Images */}

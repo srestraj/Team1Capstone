@@ -36,7 +36,10 @@ export async function GET(request: NextRequest) {
     const url = request.url;
     const { searchParams } = new URL(url);
 
+
     const category: string | null = searchParams.get("category") || null;
+    const subcategory: string | null = searchParams.get("subcategory") || null;
+    const q: string | null = searchParams.get("q") || null;
     const minPrice: number | null = parseInt(searchParams.get("minPrice") as string) || null;
     const maxPrice: number | null = parseInt(searchParams.get("maxPrice") as string) || null;
     const colorParam = searchParams.get("color");
@@ -50,8 +53,19 @@ export async function GET(request: NextRequest) {
 
     const query: any = {};
 
+    if (q) {
+      query.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+      ];
+    }
+
     if (category) {
       query.category = category;
+    }
+
+    if (subcategory) {
+      query.subCategory = subcategory;
     }
 
     if (colors && colors.length > 0) {
