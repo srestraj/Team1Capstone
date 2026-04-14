@@ -37,8 +37,6 @@ export default function LoginPage() {
     try {
       const response = await loginUser(validation.data.email, validation.data.password);
       
-      // Debug: Log everything
-      console.log("=== LOGIN DEBUG ===");
       console.log("Response:", response);
       console.log("Token:", response.token);
       
@@ -46,14 +44,12 @@ export default function LoginPage() {
       const payload = JSON.parse(atob(response.token.split('.')[1]));
       console.log("Decoded Payload:", payload);
       console.log("Role from payload:", payload.role);
-      console.log("Is admin?:", payload.role === "admin");
 
       // Save to context FIRST
       login(response.token);
       
       // Use payload for immediate redirect (context update is async)
       const isAdmin = payload.role === "admin";
-      console.log("Redirecting to:", isAdmin ? "/admin" : "/");
       
       if (isAdmin) {
         router.push("/admin");

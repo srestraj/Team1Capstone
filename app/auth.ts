@@ -33,7 +33,7 @@ const { handlers: authHandlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = (user as any).role;
+      if (user) token.role = user.role;
       return token;
     },
     async session({ session, token }) {
