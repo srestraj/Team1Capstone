@@ -75,13 +75,20 @@ console.error("Failed to add category");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const productData = {
+    ...formData,
+    sizes: (formData as any).sizes || [], 
+  };
+  console.log("Submitting product data:", productData);
     const method = editingProduct ? "PUT" : "POST";
+    
     const url = editingProduct ? `/api/products?id=${editingProduct._id}` : "/api/products";
     try {
       await fetch(url, { 
         method, 
         headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify(formData) 
+        body: JSON.stringify(productData) 
       });
       setView('list');
       fetchProducts();
